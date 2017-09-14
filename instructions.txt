@@ -1,0 +1,36 @@
+Earth is under attack! 
+
+The mysterious race of aliens known as the Rieksyth are attempting an invasion of Earth.
+It is up to you, Captain Dax, to destroy as many alien spaceships as possible.
+
+How to play
+Use the mouse to control the player position on screen and fire with left mouse click.
+Aliens will appear from the top of screen and fire vertically down.
+A number of different power-ups are available for the player to collect by coming into contact with the power-up icon.
+
+Power-ups
+01. Gain +1 life
+02. Restore maximum lives
+03. Gold coin
+04. Double speed bullets
+05. Double strength bullets
+06. Laser weapon
+07. Freeze weapon
+08. Nuclear weapon
+09. Player forcefield
+10. Planet shield
+
+Collected power-ups are displayed on the bottom of the screen along with the keyboard key required to activate the power-up.
+Collect 5 gold coins and the players gains +1 life and +10 maximum lives. 
+Avoid being hit by alien bullets, asteroids, alien spaceships and trick power-ups.
+
+Trick power-ups
+01. Lose -1 life
+02. Weapon failure
+03. Remove current power-up
+04. Empty power-up inventory
+
+The number of alien spaceships destroyed, how many have made it to Earth and the remaining player lives are displayed on the bottom of the screen.
+The game is over when the player runs out of lives or 25 alien spaceships have reached Earth.
+
+Good Luck!
