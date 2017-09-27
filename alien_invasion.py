@@ -9,134 +9,131 @@ import random
 import time
 import math
 
-# --- Global parameters --- #
+class colors:
+    black	=	(  0,	0,   0)
+    white 	=	(255, 255, 255)
+    blue	=	(  0,   0, 255)
+    green	=	(  0, 255,   0)
+    red         =	(255,   0,   0)
+    yellow	=	(255, 255,   0)
+    purple	=	(255,   0, 255)
+    cyan	=	(  0, 255, 255)
 
-BLACK	=	(  0,	0,   0)
-WHITE 	=	(255, 255, 255)
-BLUE	=	(  0,   0, 255)
-GREEN	=	(  0, 255,   0)
-RED	=	(255,   0,   0)
-YELLOW	=	(255, 255,   0)
-PURPLE	=	(255,   0, 255)
-CYAN	=	(  0, 255, 255)
+class settings:
+    # --- Global settings --- #
+    screenwidth = 900
+    screenheight = 700
+    pi = math.pi
 
-SCREEN_WIDTH = 900
-SCREEN_HEIGHT = 700
-
-PI = math.pi
-
-# --- Initialise pygame --- #
 pygame.init()
-
-SCREEN = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+SCREEN = pygame.display.set_mode([settings.screenwidth, settings.screenheight])
 pygame.mouse.set_visible(False)
 
-# --- Open image files --- #
-# - Player image - #
-PLAYER_IMG = pygame.image.load("images/playerspaceship.png").convert()
-PLAYER_IMG.set_colorkey(WHITE)
+class images:
+    # --- Open image files --- #
+    # - Player image - #
+    player_img = pygame.image.load("images/playerspaceship.png").convert()
+    player_img.set_colorkey(colors.white)
 
-# - Alien image - #
-ALIEN_IMG = pygame.image.load("images/alienspaceship.png").convert()
-ALIEN_IMG.set_colorkey(WHITE)
-ALIEN_IMG = pygame.transform.flip(ALIEN_IMG, False, True)
-TOUGH_ALIEN_IMG = pygame.image.load("images/alienspaceshipstrong.png").convert()
-TOUGH_ALIEN_IMG.set_colorkey(WHITE)
-TOUGH_ALIEN_IMG = pygame.transform.flip(TOUGH_ALIEN_IMG, False, True)
+    # - Alien image - #
+    alien_img = pygame.image.load("images/alienspaceship.png").convert()
+    alien_img.set_colorkey(colors.white)
+    alien_img = pygame.transform.flip(alien_img, False, True)
+    tough_alien_img = pygame.image.load("images/alienspaceshipstrong.png").convert()
+    tough_alien_img.set_colorkey(colors.white)
+    tough_alien_img = pygame.transform.flip(tough_alien_img, False, True)
 
-# Array of alien types with characteristics in order of [image, lives, speed]
-ALIEN_CHARS = [[ALIEN_IMG, 1, 2], [TOUGH_ALIEN_IMG, 2, 1]]
+    # Array of alien types with characteristics in order of [image, lives, speed]
+    alien_chars = [[alien_img, 1, 2], [tough_alien_img, 2, 1]]
 
-# - Asteroid images - #
-AST_LRG_GRY_IMG = pygame.image.load("images/asteroidlargegrey.png").convert()
-AST_LRG_GRY_IMG.set_colorkey(WHITE)
-AST_MED_GRY_IMG = pygame.image.load("images/asteroidmediumgrey.png").convert()
-AST_MED_GRY_IMG.set_colorkey(WHITE)
-AST_SML_GRY_IMG = pygame.image.load("images/asteroidsmallgrey.png").convert()
-AST_SML_GRY_IMG.set_colorkey(WHITE)
+    # - Asteroid images - #
+    ast_lrg_gry_img = pygame.image.load("images/asteroidlargegrey.png").convert()
+    ast_lrg_gry_img.set_colorkey(colors.white)
+    ast_med_gry_img = pygame.image.load("images/asteroidmediumgrey.png").convert()
+    ast_med_gry_img.set_colorkey(colors.white)
+    ast_sml_gry_img = pygame.image.load("images/asteroidsmallgrey.png").convert()
+    ast_sml_gry_img.set_colorkey(colors.white)
 
-AST_LGE_BRN_IMG = pygame.image.load("images/asteroidlargebrown.png").convert()
-AST_LGE_BRN_IMG.set_colorkey(WHITE)
-AST_MED_BRN_IMG = pygame.image.load("images/asteroidmediumbrown.png").convert()
-AST_MED_BRN_IMG.set_colorkey(WHITE)
-AST_SML_BRN_IMG = pygame.image.load("images/asteroidsmallbrown.png").convert()
-AST_SML_BRN_IMG.set_colorkey(WHITE)
+    ast_lrg_brn_img = pygame.image.load("images/asteroidlargebrown.png").convert()
+    ast_lrg_brn_img.set_colorkey(colors.white)
+    ast_med_brn_img = pygame.image.load("images/asteroidmediumbrown.png").convert()
+    ast_med_brn_img.set_colorkey(colors.white)
+    ast_sml_brn_img = pygame.image.load("images/asteroidsmallbrown.png").convert()
+    ast_sml_brn_img.set_colorkey(colors.white)
 
-AST_LGE_RED_IMG = pygame.image.load("images/asteroidlargered.png").convert()
-AST_LGE_RED_IMG.set_colorkey(WHITE)
-AST_MED_RED_IMG = pygame.image.load("images/asteroidmediumred.png").convert()
-AST_MED_RED_IMG.set_colorkey(WHITE)
-AST_SML_RED_IMG = pygame.image.load("images/asteroidsmallred.png").convert()
-AST_SML_RED_IMG.set_colorkey(WHITE)
+    ast_lrg_red_img = pygame.image.load("images/asteroidlargered.png").convert()
+    ast_lrg_red_img.set_colorkey(colors.white)
+    ast_med_red_img = pygame.image.load("images/asteroidmediumred.png").convert()
+    ast_med_red_img.set_colorkey(colors.white)
+    ast_sml_red_img = pygame.image.load("images/asteroidsmallred.png").convert()
+    ast_sml_red_img.set_colorkey(colors.white)
 
-AST_GRY_LIST = [AST_SML_GRY_IMG,
-                AST_MED_GRY_IMG,
-                AST_LRG_GRY_IMG]
-AST_BRN_LIST = [AST_SML_BRN_IMG,
-                AST_MED_BRN_IMG,
-                AST_LGE_BRN_IMG]
-AST_RED_LIST = [AST_SML_RED_IMG,
-                AST_MED_RED_IMG,
-                AST_LGE_RED_IMG]
-AST_COL_LIST = [AST_GRY_LIST,
-                AST_BRN_LIST,
-                AST_RED_LIST]
+    ast_gry_list = [ast_sml_gry_img,
+                    ast_med_gry_img,
+                    ast_lrg_gry_img]
+    ast_brn_list = [ast_sml_brn_img,
+                    ast_med_brn_img,
+                    ast_lrg_brn_img]
+    ast_red_list = [ast_sml_red_img,
+                    ast_med_red_img,
+                    ast_lrg_red_img]
+    ast_color_list = [ast_gry_list,
+                      ast_brn_list,
+                      ast_red_list]
 
-# - Power up images - #
-HEART_IMAGE = pygame.image.load("images/heartonelife.png").convert()
-HEART_IMAGE.set_colorkey(BLACK)
+    # - Power up images - #
+    heart_img = pygame.image.load("images/heartonelife.png").convert()
+    heart_img.set_colorkey(colors.black)
 
-LOSE_LIFE_IMAGE = pygame.image.load("images/goldskull.png").convert()
-LOSE_LIFE_IMAGE.set_colorkey(WHITE)
+    lose_life_img = pygame.image.load("images/goldskull.png").convert()
+    lose_life_img.set_colorkey(colors.white)
 
-MAX_HEALTH_IMAGE = pygame.image.load("images/heartfulllives.png").convert()
-MAX_HEALTH_IMAGE.set_colorkey(BLACK)
+    max_health_img = pygame.image.load("images/heartfulllives.png").convert()
+    max_health_img.set_colorkey(colors.black)
 
-FAST_BULLETS_IMAGE = pygame.image.load("images/fastbullets.png").convert()
-FAST_BULLETS_IMAGE.set_colorkey(BLACK)
+    fast_bullets_img = pygame.image.load("images/fastbullets.png").convert()
+    fast_bullets_img.set_colorkey(colors.black)
 
-LASER_IMAGE = pygame.image.load("images/laser.png").convert()
-LASER_IMAGE.set_colorkey(BLACK)
+    laser_img = pygame.image.load("images/laser.png").convert()
+    laser_img.set_colorkey(colors.black)
 
-FORCE_FIELD_IMAGE_1 = pygame.image.load("images/forcefieldsingle.png").convert()
-FORCE_FIELD_IMAGE_1.set_colorkey(BLACK)
+    force_field_img_1 = pygame.image.load("images/forcefieldsingle.png").convert()
+    force_field_img_1.set_colorkey(colors.black)
 
-FORCE_FIELD_IMAGE_2 = pygame.image.load("images/forcefielddouble.png").convert()
-FORCE_FIELD_IMAGE_2.set_colorkey(BLACK)
+    force_field_img_2 = pygame.image.load("images/forcefielddouble.png").convert()
+    force_field_img_2.set_colorkey(colors.black)
 
-FORCE_FIELD_IMAGE_3 = pygame.image.load("images/forcefieldtriple.png").convert()
-FORCE_FIELD_IMAGE_3.set_colorkey(BLACK)
+    force_field_img_3 = pygame.image.load("images/forcefieldtriple.png").convert()
+    force_field_img_3.set_colorkey(colors.black)
 
-WORLD_SHIELD_IMAGE = pygame.image.load("images/worldshield.png").convert()
-WORLD_SHIELD_IMAGE.set_colorkey(BLACK)
+    world_shield_img = pygame.image.load("images/worldshield.png").convert()
+    world_shield_img.set_colorkey(colors.black)
 
-FREEZE_IMAGE = pygame.image.load("images/freeze.png").convert()
-FREEZE_IMAGE.set_colorkey(BLACK)
+    freeze_img = pygame.image.load("images/freeze.png").convert()
+    freeze_img.set_colorkey(colors.black)
 
-NUKE_IMAGE = pygame.image.load("images/nuke.png").convert()
-NUKE_IMAGE.set_colorkey(BLACK)
+    nuke_img = pygame.image.load("images/nuke.png").convert()
+    nuke_img.set_colorkey(colors.black)
 
-DOUBLE_STRENGTH_BULLETS_IMAGE = pygame.image.load("images/doublestrength.png").convert()
-DOUBLE_STRENGTH_BULLETS_IMAGE.set_colorkey(BLACK)
+    dbl_str_bullet_img = pygame.image.load("images/doublestrength.png").convert()
+    dbl_str_bullet_img.set_colorkey(colors.black)
 
-COIN_IMAGE = pygame.image.load("images/coin.png").convert()
-COIN_IMAGE.set_colorkey(WHITE)
+    coin_img = pygame.image.load("images/coin.png").convert()
+    coin_img.set_colorkey(colors.white)
 
-BULLET_BLOCK_IMAGE = pygame.image.load("images/block.png").convert()
-BULLET_BLOCK_IMAGE.set_colorkey(WHITE)
+    bullet_block_img = pygame.image.load("images/block.png").convert()
+    bullet_block_img.set_colorkey(colors.white)
 
-REMOVE_ITEMS_IMAGE = pygame.image.load("images/removeitems.png").convert()
-REMOVE_ITEMS_IMAGE.set_colorkey(BLACK)
+    rmv_item_img = pygame.image.load("images/removeitems.png").convert()
+    rmv_item_img.set_colorkey(colors.black)
 
-RESET_BONUS_IMAGE = pygame.image.load("images/reseticon.png").convert()
-RESET_BONUS_IMAGE.set_colorkey(BLACK)
+    reset_bonus_img = pygame.image.load("images/reseticon.png").convert()
+    reset_bonus_img.set_colorkey(colors.black)
 
-POWER_UP_IMAGES = [HEART_IMAGE, LOSE_LIFE_IMAGE, MAX_HEALTH_IMAGE, FAST_BULLETS_IMAGE, LASER_IMAGE,
-                   WORLD_SHIELD_IMAGE, FREEZE_IMAGE, NUKE_IMAGE, DOUBLE_STRENGTH_BULLETS_IMAGE,
-                   FORCE_FIELD_IMAGE_1, FORCE_FIELD_IMAGE_2, FORCE_FIELD_IMAGE_3, COIN_IMAGE,
-                   BULLET_BLOCK_IMAGE, REMOVE_ITEMS_IMAGE, RESET_BONUS_IMAGE]
-
-# --- Classes --- #
+    pwrup_imgs = [heart_img, lose_life_img, max_health_img, fast_bullets_img, laser_img,
+                  world_shield_img, freeze_img, nuke_img, dbl_str_bullet_img,
+                  force_field_img_1, force_field_img_2, force_field_img_3, coin_img,
+                  bullet_block_img, rmv_item_img, reset_bonus_img]
 
 class Player(pygame.sprite.Sprite):
     """ This is the player """
@@ -153,12 +150,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = pos
 
         # - Keep player inside screen - #
-        if self.rect.right > SCREEN_WIDTH:
-            self.rect.right = SCREEN_WIDTH
+        if self.rect.right > settings.screenwidth:
+            self.rect.right = settings.screenwidth
         if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.bottom > SCREEN_HEIGHT - 40:
-            self.rect.bottom = SCREEN_HEIGHT - 40
+        if self.rect.bottom > settings.screenheight - 40:
+            self.rect.bottom = settings.screenheight - 40
         if self.rect.top < 0:
             self.rect.top = 0
 
@@ -183,7 +180,7 @@ class Alien(pygame.sprite.Sprite):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(SCREEN_WIDTH - 50)
+        self.rect.x = random.randrange(settings.screenwidth - 50)
         self.rect.y = -50
 
         self.lives = lives
@@ -206,7 +203,7 @@ class Asteroid(pygame.sprite.Sprite):
         self.direction = random.choice([1, -1])
 
         # - Random position of asteroid - #
-        self.rect.x = random.randrange(0, SCREEN_WIDTH)
+        self.rect.x = random.randrange(0, settings.screenwidth)
         self.rect.y = -self.rect.height
         # - Drift of asteroid in x axis - #
         self.dx = random.choice([-3, -2, -1, 1, 2, 3])
@@ -248,7 +245,7 @@ class Power_up(pygame.sprite.Sprite):
 
         # - Initialise power-up - #
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(0, SCREEN_WIDTH - 10)
+        self.rect.x = random.randrange(0, settings.screenwidth - 10)
         self.rect.y = -10
         self.speed = 1
         self.timer = 0
@@ -293,19 +290,19 @@ class Force_field(pygame.sprite.Sprite):
         self.rect.center = pos
 
     def draw(self, screen):
-        pygame.draw.arc(screen, CYAN, self.rect, 0, PI, 2)
+        pygame.draw.arc(screen, colors.cyan, self.rect, 0, settings.pi, 2)
 
 class World_shield(pygame.sprite.Sprite):
     """ Force field to protect planet """
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface([SCREEN_WIDTH + 200, 50])
+        self.image = pygame.Surface([settings.screenwidth + 200, 50])
         self.rect = self.image.get_rect()
         self.rect.x = -100
-        self.rect.y = SCREEN_HEIGHT - 100
+        self.rect.y = settings.screenheight - 100
 
     def draw(self, screen):
-        pygame.draw.arc(screen, PURPLE, self.rect, 0, PI, 3)
+        pygame.draw.arc(screen, colors.purple, self.rect, 0, settings.pi, 3)
 
 class Wave(pygame.sprite.Sprite):
     """
@@ -351,7 +348,7 @@ class Game(object):
 
         self.playerbulletspeed = 3
         self.playerbulletstrength = 1
-        self.bullet_color = WHITE
+        self.bullet_color = colors.white
 
         self.fastbullets = False
         self.choose_fastbullets = False
@@ -406,7 +403,7 @@ class Game(object):
 
         # --- Create the sprites ---#
         # - Create the player - #
-        self.player = Player(PLAYER_IMG)
+        self.player = Player(images.player_img)
         self.player_list.add(self.player)
 
     def process_events(self):
@@ -421,7 +418,7 @@ class Game(object):
                 if not self.game_over:
                     if not self.bullet_jam:
                         if self.choose_laser:
-                            laser = Laser(4, 10, RED)
+                            laser = Laser(4, 10, colors.red)
                             laser.rect.centerx = self.player.rect.centerx
                             laser.rect.bottom = self.player.rect.top
                             self.all_sprites_list.add(laser)
@@ -475,7 +472,7 @@ class Game(object):
                             self.choose_doublestrengthbullets = True
                             self.counter_doublestrengthbullets -= 1
                             self.playerbulletstrength = 2
-                            self.bullet_color = PURPLE
+                            self.bullet_color = colors.purple
                             self.doublestrengthbulletstime = time.time()
 
                 if self.game_over:
@@ -536,7 +533,7 @@ class Game(object):
                 if time.time() - self.doublestrengthbulletstime > 10:
                     self.choose_doublestrengthbullets = False
                     self.playerbulletstrength = 1
-                    self.bullet_color = WHITE
+                    self.bullet_color = colors.white
 
             if self.choose_laser: # DOES PLAYER GET POINTS FOR HITTING OBJECTS WITH LASER?????
                 for laser in self.laser_list:
@@ -554,8 +551,8 @@ class Game(object):
             if self.freeze_wave_shoot:
                 self.freeze_wave.update()
                 if (self.freeze_wave.rect.top < 0 and
-                    self.freeze_wave.rect.bottom > SCREEN_HEIGHT - 40 and
-                    self.freeze_wave.rect.right > SCREEN_WIDTH and
+                    self.freeze_wave.rect.bottom > settings.screenheight - 40 and
+                    self.freeze_wave.rect.right > settings.screenwidth and
                     self.freeze_wave.rect.left < 0):
                         self.freeze_wave_shoot = False
                 wave_hit_alien_list = pygame.sprite.spritecollide(self.freeze_wave, self.alien_list, False)
@@ -599,7 +596,7 @@ class Game(object):
             # Does nuke freeze wave hit enemy or enemy bullets
             if self.nuke_wave_shoot:
                 self.nuke_wave.update()
-                if self.nuke_wave.rect.top < 0 and self.nuke_wave.rect.bottom > SCREEN_HEIGHT - 40 and self.nuke_wave.rect.right > SCREEN_WIDTH and self.nuke_wave.rect.left < 0:
+                if self.nuke_wave.rect.top < 0 and self.nuke_wave.rect.bottom > settings.screenheight - 40 and self.nuke_wave.rect.right > settings.screenwidth and self.nuke_wave.rect.left < 0:
                     self.nuke_wave_shoot = False
                 wave_hit_alien_list = pygame.sprite.spritecollide(self.nuke_wave, self.alien_list, True)
                 wave_hit_alien_bullet_list = pygame.sprite.spritecollide(self.nuke_wave, self.alien_bullet_list, True)
@@ -618,9 +615,9 @@ class Game(object):
             # ---- DOES A POWER UP APPEAR ----- #
             yes = random.randrange(750)
             if yes == 0:
-                choice = random.choice(POWER_UP_IMAGES)
+                choice = random.choice(images.pwrup_imgs)
                 #choice = random.choice([9,10,11])
-                #power_up = Power_up(POWER_UP_IMAGES[15])
+                #power_up = Power_up(images.pwrup_imgs[15])
                 power_up = Power_up(choice)
                 self.all_sprites_list.add(power_up)
                 self.power_up_list.add(power_up)
@@ -630,9 +627,9 @@ class Game(object):
             yes = random.randrange(150)
             if yes == 0:
                 alien_type = random.choice([0, 1])
-                image = ALIEN_CHARS[alien_type][0]
-                lives = ALIEN_CHARS[alien_type][1]
-                speed = ALIEN_CHARS[alien_type][2]
+                image = images.alien_chars[alien_type][0]
+                lives = images.alien_chars[alien_type][1]
+                speed = images.alien_chars[alien_type][2]
                 alien = Alien(image, lives, speed)
                 self.all_sprites_list.add(alien)
                 self.alien_list.add(alien)
@@ -645,7 +642,7 @@ class Game(object):
                     yes = random.randrange(200)
                     #yes = 1
                     if yes == 0:
-                        alien_bullet = Bullet(4, 10, GREEN, -3, 1)
+                        alien_bullet = Bullet(4, 10, colors.green, -3, 1)
                         alien_bullet.rect.centerx = alien.rect.centerx
                         alien_bullet.rect.top = alien.rect.bottom
                         self.all_sprites_list.add(alien_bullet)
@@ -656,7 +653,7 @@ class Game(object):
             yes = random.randrange(500)
             #yes = 1
             if yes == 0:
-                choice = random.choice(AST_COL_LIST)
+                choice = random.choice(images.ast_color_list)
                 lives = random.randrange(3)
                 asteroid = Asteroid(choice[lives], lives)
                 self.all_sprites_list.add(asteroid)
@@ -714,7 +711,7 @@ class Game(object):
                     self.all_sprites_list.remove(bullet)
 
                 # - Check if alien bullet flies off screen - #
-                if bullet.rect.top > SCREEN_HEIGHT - 40:
+                if bullet.rect.top > settings.screenheight - 40:
                     self.alien_bullet_list.remove(bullet)
                     self.all_sprites_list.remove(bullet)
 
@@ -735,65 +732,65 @@ class Game(object):
             # - Check if player gets a power up - #
             power_up_hit = pygame.sprite.spritecollide(self.player, self.power_up_list, True)
             for bonus in power_up_hit:
-                if bonus.image == HEART_IMAGE:
+                if bonus.image == images.heart_img:
                     if self.player.lives == self.player.max_lives:
                         pass
                     else:
                         self.player.lives += 1
-                elif bonus.image == LOSE_LIFE_IMAGE:
+                elif bonus.image == images.lose_life_img:
                     self.player.lives -= 1
-                elif bonus.image == MAX_HEALTH_IMAGE:
+                elif bonus.image == images.max_health_img:
                     self.player.lives = 10
-                elif bonus.image == FAST_BULLETS_IMAGE:
+                elif bonus.image == images.fast_bullets_img:
                     self.fastbullets = True
                     self.counter_fastbullets += 1
-                elif bonus.image == LASER_IMAGE:
+                elif bonus.image == images.laser_img:
                     self.laser = True
                     self.counter_laser += 1
-                elif bonus.image == FORCE_FIELD_IMAGE_1:
+                elif bonus.image == images.force_field_img_1:
                     if not self.force_field:
                         self.force_field = True
                         self.shield = Force_field(self.player.rect.width + 3, self.player.rect.height + 3, self.player.rect.center, 1)
                         self.force_field_list.add(self.shield)
                         self.forcefieldtime = time.time()
-                elif bonus.image == FORCE_FIELD_IMAGE_2:
+                elif bonus.image == images.force_field_img_2:
                     if not self.force_field:
                         self.force_field = True
                         self.shield = Force_field(self.player.rect.width + 3, self.player.rect.height + 3, self.player.rect.center, 2)
                         self.force_field_list.add(self.shield)
                         self.forcefieldtime = time.time()
-                elif bonus.image == FORCE_FIELD_IMAGE_3:
+                elif bonus.image == images.force_field_img_3:
                     if not self.force_field:
                         self.force_field = True
                         self.shield = Force_field(self.player.rect.width + 3, self.player.rect.height + 3, self.player.rect.center, 3)
                         self.force_field_list.add(self.shield)
                         self.forcefieldtime = time.time()
-                elif bonus.image == WORLD_SHIELD_IMAGE:
+                elif bonus.image == images.world_shield_img:
                     self.world_shield = True
                     self.counter_world_shield += 1
-                elif bonus.image == FREEZE_IMAGE:
+                elif bonus.image == images.freeze_img:
                     self.freeze = True
                     self.counter_freeze += 1
-                elif bonus.image == NUKE_IMAGE:
+                elif bonus.image == images.nuke_img:
                     self.nuke = True
                     self.counter_nuke += 1
-                elif bonus.image == DOUBLE_STRENGTH_BULLETS_IMAGE:
+                elif bonus.image == images.dbl_str_bullet_img:
                     self.doublestrengthbullets = True
                     self.counter_doublestrengthbullets += 1
-                elif bonus.image == COIN_IMAGE:
+                elif bonus.image == images.coin_img:
                     self.coin_counter += 1
-                elif bonus.image == BULLET_BLOCK_IMAGE:
+                elif bonus.image == images.bullet_block_img:
                     if not self.bullet_jam:
                         self.bullet_jam = True
                         self.bullet_jam_timer = time.time()
-                elif bonus.image == REMOVE_ITEMS_IMAGE:
+                elif bonus.image == images.rmv_item_img:
                     self.counter_fastbullets = 0
                     self.counter_laser = 0
                     self.counter_world_shield = 0
                     self.counter_freeze = 0
                     self.counter_nuke = 0
                     self.counter_doublestrengthbullets = 0
-                elif bonus.image == RESET_BONUS_IMAGE:
+                elif bonus.image == images.reset_bonus_img:
                     self.force_field = False
                     self.choose_fastbullets = False
                     self.playerbulletspeed = 3
@@ -831,27 +828,27 @@ class Game(object):
             # ----- DO OBJECTS OR ALIENS FLY OFF SCREEN? ----- #
             # - Check if alien escapes past player - #
             for alien in self.alien_list:
-                if alien.rect.top > SCREEN_HEIGHT - 40:
+                if alien.rect.top > settings.screenheight - 40:
                     self.alien_list.remove(alien)
                     self.all_sprites_list.remove(alien)
                     self.aliens_escaped += 1
 
             # - Check if asteroid flies off screen - #
             for asteroid in self.asteroids_list:
-                if asteroid.rect.top > SCREEN_HEIGHT - 40:
+                if asteroid.rect.top > settings.screenheight - 40:
                     self.asteroids_list.remove(asteroid)
                     self.all_sprites_list.remove(asteroid)
 
             # - Check if power up flies off screen - #
             for bonus in self.power_up_list:
-                if bonus.rect.top > SCREEN_HEIGHT - 40:
+                if bonus.rect.top > settings.screenheight - 40:
                     self.power_up_list.remove(bonus)
                     self.all_sprites_list.remove(bonus)
 
     def display_frame(self, screen):
         """ Update screen display """
         # - Blank screen - #
-        screen.fill(BLACK)
+        screen.fill(colors.black)
 
         # - Draw game over screen - #
         if self.game_over:
@@ -859,28 +856,28 @@ class Game(object):
             if self.score > int(self.high_score[2]):
                 # - Save new high score - #
                 self.new_high_score = str(self.score)
-                text = font.render("New High Score! Enter Name:", True, RED)
-                text2 = font.render(self.name, True, RED)
+                text = font.render("New High Score! Enter Name:", True, colors.red)
+                text2 = font.render(self.name, True, colors.red)
 
             else:
                 # - Re-initialise game on mouse click
                 if self.player.lives == 0:
-                    text2 = font.render("You ran out of lives!", True, RED)
+                    text2 = font.render("You ran out of lives!", True, colors.red)
                 elif self.aliens_escaped >= self.decide_aliens_escaped:
-                    text2 = font.render("Too many aliens escaped!", True, RED)
-                text3 = font.render("Click to restart", True, RED)
+                    text2 = font.render("Too many aliens escaped!", True, colors.red)
+                text3 = font.render("Click to restart", True, colors.red)
                 font = pygame.font.SysFont("impact", 100)
-                text = font.render("GAME OVER", True, RED)
-                center_x = (SCREEN_WIDTH // 2) - (text3.get_width() // 2)
-                center_y = (SCREEN_HEIGHT // 2) + text.get_height() + text2.get_height()
+                text = font.render("GAME OVER", True, colors.red)
+                center_x = (settings.screenwidth // 2) - (text3.get_width() // 2)
+                center_y = (settings.screenheight // 2) + text.get_height() + text2.get_height()
                 screen.blit(text3, [center_x, center_y])
 
-            center_x = (SCREEN_WIDTH // 2) - (text.get_width() // 2)
-            center_y = (SCREEN_HEIGHT // 2) - (text.get_height() // 2)
+            center_x = (settings.screenwidth // 2) - (text.get_width() // 2)
+            center_y = (settings.screenheight // 2) - (text.get_height() // 2)
             screen.blit(text, [center_x, center_y])
 
-            center_x = (SCREEN_WIDTH // 2) - (text2.get_width() // 2)
-            center_y = (SCREEN_HEIGHT // 2) + (text.get_height() // 2)
+            center_x = (settings.screenwidth // 2) - (text2.get_width() // 2)
+            center_y = (settings.screenheight // 2) + (text.get_height() // 2)
             screen.blit(text2, [center_x, center_y])
 
         # - Draw game graphics - #
@@ -902,19 +899,19 @@ class Game(object):
                 self.planet_shield.draw(screen)
 
             if self.freeze_wave_shoot:
-                self.freeze_wave.draw(screen, BLUE)
+                self.freeze_wave.draw(screen, colors.blue)
 
             if self.nuke_wave_shoot:
-                self.nuke_wave.draw(screen, YELLOW)
+                self.nuke_wave.draw(screen, colors.yellow)
 
             # - Bottom of screen for score and lives display - #
-            pygame.draw.rect(screen, BLACK, [0, SCREEN_HEIGHT - 40, SCREEN_WIDTH, SCREEN_HEIGHT])
-            pygame.draw.line(screen, WHITE, [0, SCREEN_HEIGHT - 40], [SCREEN_WIDTH, SCREEN_HEIGHT - 40], 2)
+            pygame.draw.rect(screen, colors.black, [0, settings.screenheight - 40, settings.screenwidth, settings.screenheight])
+            pygame.draw.line(screen, colors.white, [0, settings.screenheight - 40], [settings.screenwidth, settings.screenheight - 40], 2)
 
             font = pygame.font.SysFont("impact", 20)
 
             # - Divide bottom of screen into sections - #
-            box_size = SCREEN_WIDTH // 4
+            box_size = settings.screenwidth // 4
             subbox_size = box_size // 6
 
             score_pos_x = 10
@@ -924,40 +921,40 @@ class Game(object):
             items_pos_x = (2 * box_size)
 
             # - Display aliens killed - #
-            score_text = font.render("Destroyed: " + str(self.score), True, RED)
+            score_text = font.render("Destroyed: " + str(self.score), True, colors.red)
 
             # - Display how may aliens escaped - #
-            escaped_text = font.render("Escaped: " + str(self.aliens_escaped) + "/" + str(self.decide_aliens_escaped), True, RED)
+            escaped_text = font.render("Escaped: " + str(self.aliens_escaped) + "/" + str(self.decide_aliens_escaped), True, colors.red)
 
             # - Display what items are available - #
-            items_text = font.render("Bonus:", True, RED)
+            items_text = font.render("Bonus:", True, colors.red)
 
             # - Display lives left - #
             lives_text = font.render("Lives: " +
                                      str(self.player.lives) +
                                      "/" +
-                                     str(self.player.max_lives), True, RED)
+                                     str(self.player.max_lives), True, colors.red)
 
-            text_pos_y = SCREEN_HEIGHT - score_text.get_height() - 5
+            text_pos_y = settings.screenheight - score_text.get_height() - 5
 
             # - Display which keys to press for weapon choice - #
             font = pygame.font.SysFont("arial", 10)
-            fastbullets_counter_text = font.render(str(self.counter_fastbullets), True, RED)
-            laser_counter_text = font.render(str(self.counter_laser), True, RED)
-            world_shield_counter_text = font.render(str(self.counter_world_shield), True, RED)
-            freeze_counter_text = font.render(str(self.counter_freeze), True, RED)
-            nuke_counter_text = font.render(str(self.counter_nuke), True, RED)
-            doublestrengthbullets_counter_text = font.render(str(self.counter_doublestrengthbullets), True, RED)
+            fastbullets_counter_text = font.render(str(self.counter_fastbullets), True, colors.red)
+            laser_counter_text = font.render(str(self.counter_laser), True, colors.red)
+            world_shield_counter_text = font.render(str(self.counter_world_shield), True, colors.red)
+            freeze_counter_text = font.render(str(self.counter_freeze), True, colors.red)
+            nuke_counter_text = font.render(str(self.counter_nuke), True, colors.red)
+            doublestrengthbullets_counter_text = font.render(str(self.counter_doublestrengthbullets), True, colors.red)
 
             # - Bonus images positions - #
             fastbullets_pos_x = items_pos_x + items_text.get_width() + 10
-            laser_pos_x = fastbullets_pos_x + FAST_BULLETS_IMAGE.get_width() + 10
-            world_shield_pos_x = laser_pos_x + LASER_IMAGE.get_width() + 10
-            freeze_pos_x = world_shield_pos_x + WORLD_SHIELD_IMAGE.get_width() + 10
-            nuke_pos_x = freeze_pos_x + FREEZE_IMAGE.get_width() + 10
-            doublestrengthbullets_pos_x = nuke_pos_x + NUKE_IMAGE.get_width() + 10
+            laser_pos_x = fastbullets_pos_x + images.fast_bullets_img.get_width() + 10
+            world_shield_pos_x = laser_pos_x + images.laser_img.get_width() + 10
+            freeze_pos_x = world_shield_pos_x + images.world_shield_img.get_width() + 10
+            nuke_pos_x = freeze_pos_x + images.freeze_img.get_width() + 10
+            doublestrengthbullets_pos_x = nuke_pos_x + images.nuke_img.get_width() + 10
 
-            lives_pos_x = SCREEN_WIDTH - lives_text.get_width() - 10
+            lives_pos_x = settings.screenwidth - lives_text.get_width() - 10
 
             # - Bonus counter number text positions - #
             counter_text_pos_y = text_pos_y - (fastbullets_counter_text.get_height() // 2)
@@ -970,12 +967,12 @@ class Game(object):
             doublestrengthbullets_counter_pos_x = doublestrengthbullets_pos_x - doublestrengthbullets_counter_text.get_width()
 
             # - Bonus keyboard choices - #
-            fastbullets_key_text = font.render("S", True, RED)
-            laser_key_text = font.render("L", True, RED)
-            world_shield_key_text = font.render("W", True, RED)
-            freeze_key_text = font.render("F", True, RED)
-            nuke_key_text = font.render("N", True, RED)
-            doublestrengthbullets_key_text = font.render("D", True, RED)
+            fastbullets_key_text = font.render("S", True, colors.red)
+            laser_key_text = font.render("L", True, colors.red)
+            world_shield_key_text = font.render("W", True, colors.red)
+            freeze_key_text = font.render("F", True, colors.red)
+            nuke_key_text = font.render("N", True, colors.red)
+            doublestrengthbullets_key_text = font.render("D", True, colors.red)
 
             # - Bonus keyboard key text positions - #
             keyboard_text_pos_y = text_pos_y + (fastbullets_key_text.get_height() // 2)
@@ -994,27 +991,27 @@ class Game(object):
 
             screen.blit(items_text, [items_pos_x, text_pos_y])
 
-            screen.blit(FAST_BULLETS_IMAGE, [fastbullets_pos_x, text_pos_y])
+            screen.blit(images.fast_bullets_img, [fastbullets_pos_x, text_pos_y])
             screen.blit(fastbullets_counter_text, [fastbullets_counter_pos_x, counter_text_pos_y])
             screen.blit(fastbullets_key_text, [fastbullets_key_text_pos_x, keyboard_text_pos_y])
 
-            screen.blit(LASER_IMAGE, [laser_pos_x, text_pos_y])
+            screen.blit(images.laser_img, [laser_pos_x, text_pos_y])
             screen.blit(laser_counter_text, [laser_counter_pos_x, counter_text_pos_y])
             screen.blit(laser_key_text, [laser_key_text_pos_x, keyboard_text_pos_y])
 
-            screen.blit(WORLD_SHIELD_IMAGE, [world_shield_pos_x, text_pos_y])
+            screen.blit(images.world_shield_img, [world_shield_pos_x, text_pos_y])
             screen.blit(world_shield_counter_text, [world_shield_counter_pos_x, counter_text_pos_y])
             screen.blit(world_shield_key_text, [world_shield_key_text_pos_x, keyboard_text_pos_y])
 
-            screen.blit(FREEZE_IMAGE, [freeze_pos_x, text_pos_y])
+            screen.blit(images.freeze_img, [freeze_pos_x, text_pos_y])
             screen.blit(freeze_counter_text, [freeze_counter_pos_x, counter_text_pos_y])
             screen.blit(freeze_key_text, [freeze_key_text_pos_x, keyboard_text_pos_y])
 
-            screen.blit(NUKE_IMAGE, [nuke_pos_x, text_pos_y])
+            screen.blit(images.nuke_img, [nuke_pos_x, text_pos_y])
             screen.blit(nuke_counter_text, [nuke_counter_pos_x, counter_text_pos_y])
             screen.blit(nuke_key_text, [nuke_key_text_pos_x, keyboard_text_pos_y])
 
-            screen.blit(DOUBLE_STRENGTH_BULLETS_IMAGE, [doublestrengthbullets_pos_x, text_pos_y])
+            screen.blit(images.dbl_str_bullet_img, [doublestrengthbullets_pos_x, text_pos_y])
             screen.blit(doublestrengthbullets_counter_text, [doublestrengthbullets_counter_pos_x, counter_text_pos_y])
             screen.blit(doublestrengthbullets_key_text, [doublestrengthbullets_key_text_pos_x, keyboard_text_pos_y])
 
